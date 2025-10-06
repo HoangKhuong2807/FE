@@ -51,7 +51,7 @@ export default function ProductDetailPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center space-y-6 p-8 bg-white rounded-xl shadow-md max-w-md w-full">
           <h2 className="text-3xl font-bold text-red-600">Product Not Found</h2>
-          <p className="text-gray-500">The product you're looking for doesn't exist or has been removed.</p>
+          <p className="text-gray-500">The product youre looking for doesnt exist or has been removed.</p>
           <Button 
             onClick={handleBack} 
             variant="outline" 
