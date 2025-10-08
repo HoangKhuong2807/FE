@@ -32,11 +32,11 @@ export default function Home() {
 
   const handleSortChange = (value: string) => {
     const [sortBy, sortOrder] = value.split('-');
-    setQuery(prev => ({ 
-      ...prev, 
+    setQuery(prev => ({
+      ...prev,
       sortBy: sortBy as QueryProductDto['sortBy'],
       sortOrder: sortOrder as QueryProductDto['sortOrder'],
-      page: 1 
+      page: 1
     }));
   };
 
@@ -71,17 +71,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">All Products</h1>
           <p className="text-gray-500 mt-1 text-sm">
-            {productsResponse?.meta ? (
-              `${productsResponse.meta.total} products found`
-            ) : (
-              'Loading products...'
-            )}
+            {productsResponse?.meta
+              ? `${productsResponse.meta.total} products found`
+              : 'Loading products...'}
           </p>
         </div>
 
@@ -124,14 +122,14 @@ export default function Home() {
             <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
             <span className="ml-3 text-gray-600">Loading products...</span>
           </div>
-        ) : productsResponse?.data?.length === 0 ? (
+        ) : !productsResponse?.data?.length ? (
           <div className="text-center py-16 bg-white rounded-lg shadow-md">
             <h3 className="text-xl font-semibold text-gray-900">No Products Found</h3>
             <p className="text-gray-500 mt-2">Try adjusting your search or sort filters.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {productsResponse?.data?.map((product) => (
+            {productsResponse.data.map((product: Product) => (
               <ProductCard
                 key={product._id}
                 product={product}
@@ -174,8 +172,8 @@ export default function Home() {
             <DialogTitle className="text-2xl">Edit Product</DialogTitle>
           </DialogHeader>
           {editingProduct && (
-            <ProductForm 
-              product={editingProduct} 
+            <ProductForm
+              product={editingProduct}
               onSuccess={handleCloseDialog}
             />
           )}
