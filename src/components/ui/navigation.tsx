@@ -78,17 +78,17 @@ export default function Navigation({ onClose }: { onClose?: () => void }) {
       </button>
       {/* Mobile drawer */}
       {open && (
-        <div className="fixed inset-0 z-50 flex pointer-events-none">
-          <nav className="pointer-events-auto w-64 h-full bg-gray-900 text-white flex flex-col justify-between animate-slide-in shadow-xl">
+        <div className="fixed inset-0 z-50 flex">
+          <nav className="w-64 h-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col justify-between animate-slide-in shadow-xl border-r border-gray-200 dark:border-gray-800">
             <div className="flex-1 flex flex-col overflow-auto">
-              <div className="p-6 border-b border-gray-700 flex items-center justify-between">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-3" onClick={onClose}>
                   <Package className="h-8 w-8 text-blue-400" />
                   <span className="text-lg font-bold">Shopping Clother</span>
                 </Link>
                 {onClose && (
-                  <button className="ml-2 text-gray-400 hover:text-white" onClick={onClose} aria-label="Close menu">
-                    ✕
+                  <button className="ml-2 text-gray-400 hover:text-gray-900 dark:hover:text-white text-2xl font-bold" onClick={onClose} aria-label="Close menu">
+                    ×
                   </button>
                 )}
               </div>
@@ -101,7 +101,7 @@ export default function Navigation({ onClose }: { onClose?: () => void }) {
                       'px-4 py-3 text-sm font-medium rounded-md transition-colors w-full text-left',
                       pathname === item.href
                         ? 'bg-blue-600 text-white'
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                     )}
                     onClick={onClose}
                   >
@@ -110,7 +110,7 @@ export default function Navigation({ onClose }: { onClose?: () => void }) {
                 ))}
               </div>
             </div>
-            <div className="p-4 border-t border-gray-700">
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => { handleLogout(); onClose && onClose(); }}
                 className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium rounded-md bg-red-600 hover:bg-red-700 transition-colors justify-start"
@@ -121,7 +121,7 @@ export default function Navigation({ onClose }: { onClose?: () => void }) {
             </div>
           </nav>
           {/* Overlay click closes menu */}
-          <div className="flex-1 pointer-events-auto" onClick={() => setOpen(false)} />
+          <div className="flex-1" onClick={onClose} />
         </div>
       )}
     </>
