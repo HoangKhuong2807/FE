@@ -128,7 +128,7 @@ export default function Home() {
             <p className="text-gray-500 mt-2">Try adjusting your search or sort filters.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productsResponse.data.map((product: Product) => (
               <ProductCard
                 key={product._id}
