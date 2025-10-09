@@ -78,8 +78,8 @@ export default function Navigation({ onClose }: { onClose?: () => void }) {
       </button>
       {/* Mobile drawer */}
       {open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex">
-          <nav className="w-64 h-full bg-gray-900 text-white flex flex-col justify-between animate-slide-in">
+        <div className="fixed inset-0 z-50 flex pointer-events-none">
+          <nav className="pointer-events-auto w-64 h-full bg-gray-900 text-white flex flex-col justify-between animate-slide-in shadow-xl">
             <div className="flex-1 flex flex-col overflow-auto">
               <div className="p-6 border-b border-gray-700 flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-3" onClick={onClose}>
@@ -121,7 +121,7 @@ export default function Navigation({ onClose }: { onClose?: () => void }) {
             </div>
           </nav>
           {/* Overlay click closes menu */}
-          <div className="flex-1" onClick={() => setOpen(false)} />
+          <div className="flex-1 pointer-events-auto" onClick={() => setOpen(false)} />
         </div>
       )}
     </>
