@@ -22,6 +22,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
 
   const { data: productsResponse, isLoading, error } = useProducts(query);
 
@@ -69,8 +70,24 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
-      <Navigation />
+    <div className="min-h-screen bg-gray-50">
+      {/* Nút mở navigation cho mọi màn hình */}
+      <button
+        className="fixed top-4 left-4 z-50 bg-gray-900 text-white p-2 rounded-full shadow-lg"
+        onClick={() => setNavOpen(true)}
+        aria-label="Open menu"
+      >
+        <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      {/* Navigation dạng drawer */}
+      {navOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex">
+          <div className="w-64 h-full bg-gray-900 text-white flex flex-col justify-between animate-slide-in">
+            <Navigation onClose={() => setNavOpen(false)} />
+          </div>
+          <div className="flex-1" onClick={() => setNavOpen(false)} />
+        </div>
+      )}
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Header */}

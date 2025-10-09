@@ -13,7 +13,7 @@ const navigationItems = [
   { href: '/products/create', label: 'Add Product' },
 ]
 
-export default function Navigation() {
+export default function Navigation({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname()
   const router = useRouter()
   const { logout } = useAuth()
@@ -82,13 +82,15 @@ export default function Navigation() {
           <nav className="w-64 h-full bg-gray-900 text-white flex flex-col justify-between animate-slide-in">
             <div className="flex-1 flex flex-col overflow-auto">
               <div className="p-6 border-b border-gray-700 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
+                <Link href="/" className="flex items-center gap-3" onClick={onClose}>
                   <Package className="h-8 w-8 text-blue-400" />
                   <span className="text-lg font-bold">Shopping Clother</span>
                 </Link>
-                <button className="ml-2 text-gray-400 hover:text-white" onClick={() => setOpen(false)} aria-label="Close menu">
-                  ✕
-                </button>
+                {onClose && (
+                  <button className="ml-2 text-gray-400 hover:text-white" onClick={onClose} aria-label="Close menu">
+                    ✕
+                  </button>
+                )}
               </div>
               <div className="flex flex-col gap-2 p-4 items-start">
                 {navigationItems.map((item) => (
@@ -101,7 +103,7 @@ export default function Navigation() {
                         ? 'bg-blue-600 text-white'
                         : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                     )}
-                    onClick={() => setOpen(false)}
+                    onClick={onClose}
                   >
                     {item.label}
                   </Link>
@@ -110,7 +112,7 @@ export default function Navigation() {
             </div>
             <div className="p-4 border-t border-gray-700">
               <button
-                onClick={handleLogout}
+                onClick={() => { handleLogout(); onClose && onClose(); }}
                 className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium rounded-md bg-red-600 hover:bg-red-700 transition-colors justify-start"
               >
                 <LogOut className="h-5 w-5" />
