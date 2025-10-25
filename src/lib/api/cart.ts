@@ -33,7 +33,7 @@ export const getCart = async (): Promise<Cart> => {
     headers: getAuthHeaders(),
     withCredentials: true,
   });
-  return res.data;
+  return res.data.data || res.data;
 };
 
 export const addToCart = async (productId: string, quantity: number = 1): Promise<Cart> => {
@@ -45,7 +45,7 @@ export const addToCart = async (productId: string, quantity: number = 1): Promis
       withCredentials: true,
     }
   );
-  return res.data;
+  return res.data.data || res.data;
 };
 
 export const updateCartItem = async (productId: string, quantity: number): Promise<Cart> => {
@@ -57,7 +57,7 @@ export const updateCartItem = async (productId: string, quantity: number): Promi
       withCredentials: true,
     }
   );
-  return res.data;
+  return res.data.data || res.data;
 };
 
 export const removeFromCart = async (productId: string): Promise<Cart> => {
@@ -65,7 +65,7 @@ export const removeFromCart = async (productId: string): Promise<Cart> => {
     headers: getAuthHeaders(),
     withCredentials: true,
   });
-  return res.data;
+  return res.data.data || res.data;
 };
 
 export const clearCart = async (): Promise<void> => {

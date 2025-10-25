@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { login as apiLogin, logout as apiLogout } from "@/lib/api/auth";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 interface User {
   _id: string;
@@ -45,12 +46,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const getCookie = (name: string) => {
-  return document.cookie
-    .split("; ")
-    .find((row) => row.startsWith(name + "="))
-    ?.split("=")[1];
-};
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -72,7 +67,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
-        document.cookie = `accessToken=${accessToken}; path=/;`;
+        Cookies.set('accessToken', accessToken, { path: '/' });
+        console.log('✅ Token saved:', accessToken.substring(0, 15) + '...');
 
         toast.success(res.message || "Login successful!");
         router.push("/products");
@@ -95,8 +91,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     localStorage.removeItem("user");
     // Xóa cookie phía client (nếu còn)
-    document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    Cookies.remove('accessToken', { path: '/' });
+    Cookies.remove('refreshToken', { path: '/' });
     // Thử reload lại trang để đảm bảo cookie bị xóa hoàn toàn
     toast.info("Logged out");
     router.push("/");
@@ -105,23 +101,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const refresh = async (): Promise<RefreshResponse | null> => {
     try {
-      const refreshToken = getCookie("refreshToken");
+      const refreshToken = Cookies.get("accessToken");
       if (!refreshToken) {
         toast.error("No refresh token available.");
         return null;
       }
 
       const res = await axios.get<RefreshResponse>(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
-        headers: { Cookie: `refreshToken=${refreshToken}` },
+        headers: { Cookie: `accessToken=${refreshToken}` },
         withCredentials: true,
       });
 
       if (res.data.statusCode === 200 || res.data.statusCode === 201) {
         if (res.data.data.accessToken)
-          document.cookie = `accessToken=${res.data.data.accessToken}; path=/;`;
+          Cookies.set('accessToken', res.data.data.accessToken, { path: '/' });
 
         if (res.data.data.refreshToken)
-          document.cookie = `refreshToken=${res.data.data.refreshToken}; path=/;`;
+          Cookies.set('refreshToken', res.data.data.refreshToken, { path: '/' });
 
         toast.success(res.data.message || "Token refreshed successfully!");
         return res.data;

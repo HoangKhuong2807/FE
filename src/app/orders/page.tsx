@@ -10,14 +10,22 @@ export default function OrdersPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
+    const user = localStorage.getItem('user');
     const token = Cookies.get('accessToken');
-    if (!token) {
+    console.log('🔍 Orders Page - Auth check:', { 
+      hasUser: !!user, 
+      hasToken: !!token,
+      token: token ? `${token.substring(0, 15)}...` : 'none' 
+    });
+    
+    if (!user) {
+      console.log('❌ Orders Page - No user in localStorage, redirecting to /');
       router.push('/');
       return;
     }
 
+    console.log('✅ Orders Page - User found, fetching orders');
     fetchOrders();
   }, []);
 

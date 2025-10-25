@@ -16,11 +16,30 @@ interface ProductCardProps {
   onEdit?: (product: Product) => void;
 }
 
+// Helper function to validate if URL is a direct image URL
+const isValidImageUrl = (url: string): boolean => {
+  if (!url) return false;
+  try {
+    const urlObj = new URL(url);
+    // Reject Google redirect URLs
+    if (urlObj.hostname.includes('google.com') && urlObj.pathname.includes('/url')) {
+      return false;
+    }
+    // Check if URL ends with common image extensions
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
+    const pathname = urlObj.pathname.toLowerCase();
+    return imageExtensions.some(ext => pathname.endsWith(ext));
+  } catch {
+    return false;
+  }
+};
+
 export default function ProductCard({ product, onEdit }: ProductCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const deleteProduct = useDeleteProduct();
+  const hasValidImage = isValidImageUrl(product.image || '');
 
   useEffect(() => {
     const token = Cookies.get('accessToken');
@@ -44,7 +63,7 @@ export default function ProductCard({ product, onEdit }: ProductCardProps) {
     <div className="relative bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
       {/* Image Section */}
       <div className="relative h-48 bg-gray-50">
-        {product.image && !imageError ? (
+        {hasValidImage && !imageError ? (
           <Image
             src={product.image}
             alt={product.name}

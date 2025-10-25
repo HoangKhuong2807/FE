@@ -10,14 +10,23 @@ export default function CartPage() {
   const router = useRouter();
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
   useEffect(() => {
+    const user = localStorage.getItem('user');
     const token = Cookies.get('accessToken');
-    if (!token) {
+    console.log('🔍 Cart Page - Auth check:', { 
+      hasUser: !!user, 
+      hasToken: !!token,
+      token: token ? `${token.substring(0, 15)}...` : 'none' 
+    });
+    
+    if (!user) {
+      console.log('❌ Cart Page - No user in localStorage, redirecting to /');
       router.push('/');
       return;
     }
 
+    console.log('✅ Cart Page - User found, fetching cart');
     fetchCart();
   }, []);
 
@@ -90,11 +99,20 @@ export default function CartPage() {
               key={item.productId._id}
               className="flex items-center border-b py-4 last:border-b-0"
             >
-              <img
-                src={item.productId.image || '/placeholder.png'}
-                alt={item.productId.name}
-                className="w-24 h-24 object-cover rounded"
-              />
+              {item.productId.image && !imageErrors[item.productId._id] ? (
+                <img
+                  src={item.productId.image}
+                  alt={item.productId.name}
+                  className="w-24 h-24 object-cover rounded"
+                  onError={() => {
+                    setImageErrors(prev => ({ ...prev, [item.productId._id]: true }));
+                  }}
+                />
+              ) : (
+                <div className="w-24 h-24 bg-gray-200 rounded flex items-center justify-center">
+                  <span className="text-gray-400 text-xs">No Image</span>
+                </div>
+              )}
               <div className="flex-1 ml-4">
                 <h3 className="text-lg font-semibold">{item.productId.name}</h3>
                 <p className="text-gray-600">${item.price.toFixed(2)}</p>

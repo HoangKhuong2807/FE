@@ -12,6 +12,8 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+    unoptimized: false,
+    loader: 'default',
   },
 };
 

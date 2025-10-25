@@ -39,7 +39,7 @@ export const createOrder = async (): Promise<Order> => {
       withCredentials: true,
     }
   );
-  return res.data;
+  return res.data.data || res.data;
 };
 
 export const getOrderHistory = async (): Promise<Order[]> => {
@@ -47,7 +47,7 @@ export const getOrderHistory = async (): Promise<Order[]> => {
     headers: getAuthHeaders(),
     withCredentials: true,
   });
-  return res.data;
+  return res.data.data || res.data;
 };
 
 export const getOrderById = async (orderId: string): Promise<Order> => {
@@ -55,7 +55,7 @@ export const getOrderById = async (orderId: string): Promise<Order> => {
     headers: getAuthHeaders(),
     withCredentials: true,
   });
-  return res.data;
+  return res.data.data || res.data;
 };
 
 export const updatePaymentStatus = async (
@@ -70,6 +70,6 @@ export const updatePaymentStatus = async (
       withCredentials: true,
     }
   );
-  return res.data;
+  return res.data.data || res.data;
 };
 

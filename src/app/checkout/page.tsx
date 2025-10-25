@@ -14,8 +14,8 @@ export default function CheckoutPage() {
   const [placing, setPlacing] = useState(false);
 
   useEffect(() => {
-    const token = Cookies.get('accessToken');
-    if (!token) {
+    const user = localStorage.getItem('user');
+    if (!user) {
       router.push('/');
       return;
     }

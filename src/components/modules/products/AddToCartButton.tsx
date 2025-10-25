@@ -26,6 +26,8 @@ export default function AddToCartButton({
 
   const handleAddToCart = async () => {
     const token = Cookies.get('accessToken');
+    console.log('🛒 Add to cart - Token check:', token ? `${token.substring(0, 15)}...` : 'none');
+    
     if (!token) {
       toast.error('Please login to add items to cart');
       router.push('/');
@@ -34,12 +36,21 @@ export default function AddToCartButton({
 
     setAdding(true);
     try {
-      await addToCart(productId, 1);
+      console.log('🛒 Adding to cart:', { productId });
+      const result = await addToCart(productId, 1);
+      console.log('✅ Added to cart successfully:', result);
       toast.success('Added to cart!');
     } catch (error: unknown) {
+      console.error('❌ Add to cart error:', error);
+      
       // ✅ xử lý lỗi chi tiết hơn
       if (typeof error === 'object' && error !== null && 'response' in error) {
-        const apiError = error as { response?: { status?: number } };
+        const apiError = error as { response?: { status?: number; data?: any } };
+        console.error('API Error Details:', {
+          status: apiError.response?.status,
+          data: apiError.response?.data
+        });
+        
         if (apiError.response?.status === 401) {
           toast.error('Please login to add items to cart');
           router.push('/');

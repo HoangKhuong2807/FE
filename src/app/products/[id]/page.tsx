@@ -10,6 +10,24 @@ import { useState, useEffect } from 'react';
 import AddToCartButton from '@/components/modules/products/AddToCartButton';
 import Cookies from 'js-cookie';
 
+// Helper function to validate if URL is a direct image URL
+const isValidImageUrl = (url: string): boolean => {
+  if (!url) return false;
+  try {
+    const urlObj = new URL(url);
+    // Reject Google redirect URLs
+    if (urlObj.hostname.includes('google.com') && urlObj.pathname.includes('/url')) {
+      return false;
+    }
+    // Check if URL ends with common image extensions
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
+    const pathname = urlObj.pathname.toLowerCase();
+    return imageExtensions.some(ext => pathname.endsWith(ext));
+  } catch {
+    return false;
+  }
+};
+
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -27,6 +45,7 @@ export default function ProductDetailPage() {
   const { data: productResponse, isLoading, error } = useProduct(productId);
   const deleteProduct = useDeleteProduct();
   const product = productResponse?.data;
+  const hasValidImage = product ? isValidImageUrl(product.image || '') : false;
 
   const handleEdit = () => router.push(`/products/edit/${productId}`);
   const handleBack = () => router.back();
@@ -78,7 +97,7 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Image Section */}
           <div className="relative h-96 md:h-full">
-            {product.image && !imageError ? (
+            {hasValidImage && !imageError ? (
               <Image
                 src={product.image}
                 alt={product.name}

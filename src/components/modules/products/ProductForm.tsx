@@ -15,7 +15,29 @@ const productSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
   description: z.string().min(1, 'Description is required').max(500, 'Description must be less than 500 characters'),
   price: z.number().min(0, 'Price must be positive'),
-  image: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  image: z.string()
+    .optional()
+    .or(z.literal(''))
+    .refine(
+      (val) => {
+        if (!val) return true; // Allow empty
+        try {
+          const url = new URL(val);
+          // Reject Google redirect URLs
+          if (url.hostname.includes('google.com') && url.pathname.includes('/url')) {
+            return false;
+          }
+          // Check for direct image URLs
+          const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
+          return imageExtensions.some(ext => url.pathname.toLowerCase().endsWith(ext));
+        } catch {
+          return false;
+        }
+      },
+      {
+        message: 'Must be a direct image URL (ending in .jpg, .png, etc.). Do not use Google search result URLs.',
+      }
+    ),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -141,6 +163,9 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
               placeholder="https://example.com/image.jpg"
               className={`mt-1 ${errors.image ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'}`}
             />
+            <p className="mt-1 text-xs text-gray-500">
+              💡 Tip: Right-click on an image → "Copy image address" to get direct link
+            </p>
             {errors.image && (
               <p className="mt-1 text-sm text-red-600">{errors.image.message}</p>
             )}
