@@ -45,7 +45,7 @@ export default function AddToCartButton({
       
       // ✅ xử lý lỗi chi tiết hơn
       if (typeof error === 'object' && error !== null && 'response' in error) {
-        const apiError = error as { response?: { status?: number; data?: any } };
+        const apiError = error as { response?: { status?: number; data?: unknown } };
         console.error('API Error Details:', {
           status: apiError.response?.status,
           data: apiError.response?.data

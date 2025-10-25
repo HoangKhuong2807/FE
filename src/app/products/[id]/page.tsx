@@ -99,7 +99,7 @@ export default function ProductDetailPage() {
           <div className="relative h-96 md:h-full">
             {hasValidImage && !imageError ? (
               <Image
-                src={product.image}
+                src={product.image || ''}
                 alt={product.name}
                 fill
                 className="object-cover"

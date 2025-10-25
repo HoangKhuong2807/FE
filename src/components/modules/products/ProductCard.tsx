@@ -65,7 +65,7 @@ export default function ProductCard({ product, onEdit }: ProductCardProps) {
       <div className="relative h-48 bg-gray-50">
         {hasValidImage && !imageError ? (
           <Image
-            src={product.image}
+            src={product.image || ''}
             alt={product.name}
             fill
             className="object-cover hover:scale-105 transition-transform duration-300"

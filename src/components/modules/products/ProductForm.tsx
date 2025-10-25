@@ -164,7 +164,7 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
               className={`mt-1 ${errors.image ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'}`}
             />
             <p className="mt-1 text-xs text-gray-500">
-              💡 Tip: Right-click on an image → "Copy image address" to get direct link
+              💡 Tip: Right-click on an image → &quot;Copy image address&quot; to get direct link
             </p>
             {errors.image && (
               <p className="mt-1 text-sm text-red-600">{errors.image.message}</p>
