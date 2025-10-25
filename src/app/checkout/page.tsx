@@ -107,7 +107,7 @@ export default function CheckoutPage() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Payment Information</h2>
           <p className="text-gray-600 mb-6">
-            Your order will be placed with status "Pending". You can complete payment
+            Your order will be placed with status Pending. You can complete payment
             later from your order history.
           </p>
           <div className="flex gap-4">

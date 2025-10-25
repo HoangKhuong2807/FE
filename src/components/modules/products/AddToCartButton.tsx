@@ -36,13 +36,17 @@ export default function AddToCartButton({
     try {
       await addToCart(productId, 1);
       toast.success('Added to cart!');
-    } catch (error: any) {
-      if (error.response?.status === 401) {
-        toast.error('Please login to add items to cart');
-        router.push('/');
-      } else {
-        toast.error('Failed to add to cart');
+    } catch (error: unknown) {
+      // ✅ xử lý lỗi chi tiết hơn
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const apiError = error as { response?: { status?: number } };
+        if (apiError.response?.status === 401) {
+          toast.error('Please login to add items to cart');
+          router.push('/');
+          return;
+        }
       }
+      toast.error('Failed to add to cart');
     } finally {
       setAdding(false);
     }
@@ -61,4 +65,3 @@ export default function AddToCartButton({
     </Button>
   );
 }
-
