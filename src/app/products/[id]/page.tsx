@@ -6,7 +6,9 @@ import { useProduct, useDeleteProduct } from '@/hooks/useProducts';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, ArrowLeft, Edit, Trash2, Package } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import AddToCartButton from '@/components/modules/products/AddToCartButton';
+import Cookies from 'js-cookie';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -15,6 +17,12 @@ export default function ProductDetailPage() {
 
   const [isDeleting, setIsDeleting] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = Cookies.get('accessToken');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const { data: productResponse, isLoading, error } = useProduct(productId);
   const deleteProduct = useDeleteProduct();
@@ -110,21 +118,29 @@ export default function ProductDetailPage() {
               <p><span className="font-medium">Updated:</span> {new Date(product.updatedAt).toLocaleDateString()}</p>
             </div>
 
-            <div className="flex gap-4 pt-4">
-              <Button
-                onClick={handleEdit}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                <Edit className="h-5 w-5 mr-2" /> Edit Product
-              </Button>
-              <Button
-                onClick={handleDelete}
-                disabled={isDeleting}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white"
-              >
-                <Trash2 className="h-5 w-5 mr-2" />
-                {isDeleting ? 'Deleting...' : 'Delete Product'}
-              </Button>
+            <div className="space-y-3 pt-4">
+              <AddToCartButton
+                productId={product._id}
+                className="w-full bg-green-600 hover:bg-green-700 text-white"
+              />
+              {isLoggedIn && (
+                <div className="flex gap-4">
+                  <Button
+                    onClick={handleEdit}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <Edit className="h-5 w-5 mr-2" /> Edit
+                  </Button>
+                  <Button
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    <Trash2 className="h-5 w-5 mr-2" />
+                    {isDeleting ? 'Deleting...' : 'Delete'}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>

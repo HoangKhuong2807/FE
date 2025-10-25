@@ -7,7 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2, Package } from 'lucide-react';
 import { useDeleteProduct } from '@/hooks/useProducts';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import AddToCartButton from './AddToCartButton';
+import Cookies from 'js-cookie';
 
 interface ProductCardProps {
   product: Product;
@@ -17,7 +19,13 @@ interface ProductCardProps {
 export default function ProductCard({ product, onEdit }: ProductCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const deleteProduct = useDeleteProduct();
+
+  useEffect(() => {
+    const token = Cookies.get('accessToken');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this product?')) {
@@ -51,26 +59,28 @@ export default function ProductCard({ product, onEdit }: ProductCardProps) {
           </div>
         )}
 
-        {/* Action Buttons */}
-        <div className="absolute top-3 right-3 flex gap-2">
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => onEdit?.(product)}
-            className="bg-white/90 hover:bg-white text-blue-600 rounded-full p-2"
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={handleDelete}
-            disabled={isDeleting}
-            className="bg-white/90 hover:bg-white text-red-600 rounded-full p-2"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
+        {/* Action Buttons - Only show for logged in users */}
+        {isLoggedIn && (
+          <div className="absolute top-3 right-3 flex gap-2">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onEdit?.(product)}
+              className="bg-white/90 hover:bg-white text-blue-600 rounded-full p-2"
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="bg-white/90 hover:bg-white text-red-600 rounded-full p-2"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Content Section */}
@@ -91,6 +101,11 @@ export default function ProductCard({ product, onEdit }: ProductCardProps) {
             {new Date(product.createdAt).toLocaleDateString()}
           </span>
         </div>
+        <AddToCartButton
+          productId={product._id}
+          className="w-full bg-green-600 hover:bg-green-700 text-white"
+          size="sm"
+        />
       </div>
     </div>
   );

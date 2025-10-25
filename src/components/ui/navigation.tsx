@@ -3,14 +3,16 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { Package, LogOut, Menu } from 'lucide-react'
+import { Package, LogOut, Menu, ShoppingCart, ShoppingBag } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { useAuth } from '@/Context/AuthContext'
 import { useState } from 'react'
 
 const navigationItems = [
-  { href: '/', label: 'Products' },
-  { href: '/products/create', label: 'Add Product' },
+  { href: '/products', label: 'Products', icon: Package },
+  { href: '/cart', label: 'Cart', icon: ShoppingCart },
+  { href: '/orders', label: 'Orders', icon: ShoppingBag },
+  { href: '/products/create', label: 'Add Product', icon: Package },
 ]
 
 export default function Navigation({ onClose }: { onClose?: () => void }) {
@@ -42,20 +44,24 @@ export default function Navigation({ onClose }: { onClose?: () => void }) {
             </Link>
           </div>
           <div className="flex flex-col gap-2 p-4 items-start">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'px-4 py-3 text-sm font-medium rounded-md transition-colors w-full text-left',
-                  pathname === item.href
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navigationItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-md transition-colors w-full text-left',
+                    pathname === item.href
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
         <div className="p-4 border-t border-gray-700">
@@ -93,21 +99,25 @@ export default function Navigation({ onClose }: { onClose?: () => void }) {
                 )}
               </div>
               <div className="flex flex-col gap-2 p-4 items-start">
-                {navigationItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      'px-4 py-3 text-sm font-medium rounded-md transition-colors w-full text-left',
-                      pathname === item.href
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    )}
-                    onClick={onClose}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                {navigationItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        'flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-md transition-colors w-full text-left',
+                        pathname === item.href
+                          ? 'bg-blue-600 text-white'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      )}
+                      onClick={onClose}
+                    >
+                      <Icon className="h-5 w-5" />
+                      {item.label}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
             <div className="p-4 border-t border-gray-200 dark:border-gray-700">
