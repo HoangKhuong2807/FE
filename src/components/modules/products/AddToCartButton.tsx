@@ -25,10 +25,11 @@ export default function AddToCartButton({
   const router = useRouter();
 
   const handleAddToCart = async () => {
-    const token = Cookies.get('accessToken');
-    console.log('🛒 Add to cart - Token check:', token ? `${token.substring(0, 15)}...` : 'none');
+    // Check if user exists in localStorage (set during login)
+    const user = localStorage.getItem('user');
+    console.log('🛒 Add to cart - User check:', user ? 'logged in' : 'not logged in');
     
-    if (!token) {
+    if (!user) {
       toast.error('Please login to add items to cart');
       router.push('/');
       return;

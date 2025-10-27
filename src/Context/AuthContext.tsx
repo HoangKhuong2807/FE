@@ -67,8 +67,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
-        Cookies.set('accessToken', accessToken, { path: '/' });
-        console.log('✅ Token saved:', accessToken.substring(0, 15) + '...');
+        // Token được set tự động bởi backend qua httpOnly cookie
+        console.log('✅ Login successful, httpOnly cookie set by backend');
 
         toast.success(res.message || "Login successful!");
         router.push("/products");

@@ -3,11 +3,9 @@ import Cookies from 'js-cookie';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+// Headers không cần Authorization vì backend sẽ đọc từ httpOnly cookie
 const getAuthHeaders = () => {
-  const token = Cookies.get('accessToken');
-  return {
-    Authorization: `Bearer ${token}`,
-  };
+  return {};
 };
 
 export interface OrderItem {
