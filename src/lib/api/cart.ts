@@ -36,7 +36,7 @@ export const getCart = async (): Promise<Cart> => {
 
 export const addToCart = async (productId: string, quantity: number = 1): Promise<Cart> => {
   const res = await axios.post(
-    `${API_URL}/cart/add`,
+    `${API_URL}cart/add`,
     { productId, quantity },
     {
       headers: getAuthHeaders(),
@@ -48,7 +48,7 @@ export const addToCart = async (productId: string, quantity: number = 1): Promis
 
 export const updateCartItem = async (productId: string, quantity: number): Promise<Cart> => {
   const res = await axios.put(
-    `${API_URL}/cart/update`,
+    `${API_URL}cart/update`,
     { productId, quantity },
     {
       headers: getAuthHeaders(),
@@ -59,7 +59,7 @@ export const updateCartItem = async (productId: string, quantity: number): Promi
 };
 
 export const removeFromCart = async (productId: string): Promise<Cart> => {
-  const res = await axios.delete(`${API_URL}/cart/remove/${productId}`, {
+  const res = await axios.delete(`${API_URL}cart/remove/${productId}`, {
     headers: getAuthHeaders(),
     withCredentials: true,
   });
@@ -67,7 +67,7 @@ export const removeFromCart = async (productId: string): Promise<Cart> => {
 };
 
 export const clearCart = async (): Promise<void> => {
-  await axios.delete(`${API_URL}/cart/clear`, {
+  await axios.delete(`${API_URL}cart/clear`, {
     headers: getAuthHeaders(),
     withCredentials: true,
   });
