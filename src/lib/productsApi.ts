@@ -15,26 +15,26 @@ export const productsApi = {
     if (query.sortOrder) params.append('sortOrder', query.sortOrder);
 
     const queryString = params.toString();
-    return apiClient.get(`/api/products${queryString ? `?${queryString}` : ''}`);
+    return apiClient.get(`api/products${queryString ? `?${queryString}` : ''}`);
   },
 
   // Get single product by ID
   getById: async (id: string): Promise<ApiResponse<Product>> => {
-    return apiClient.get(`/api/products/${id}`);
+    return apiClient.get(`api/products/${id}`);
   },
 
   // Create new product
   create: async (data: CreateProductDto): Promise<ApiResponse<Product>> => {
-    return apiClient.post('/api/products', data);
+    return apiClient.post('api/products', data);
   },
 
   // Update product
   update: async (id: string, data: UpdateProductDto): Promise<ApiResponse<Product>> => {
-    return apiClient.patch(`/api/products/${id}`, data);
+    return apiClient.patch(`api/products/${id}`, data);
   },
 
   // Delete product
   delete: async (id: string): Promise<ApiResponse<null>> => {
-    return apiClient.delete(`/api/products/${id}`);
+    return apiClient.delete(`api/products/${id}`);
   },
 };

@@ -1,12 +1,4 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-
-// Headers không cần Authorization vì backend sẽ đọc từ httpOnly cookie
-const getAuthHeaders = () => {
-  return {};
-};
+import apiClient from '../apiClient';
 
 export interface CartItem {
   productId: {
@@ -27,49 +19,26 @@ export interface Cart {
 }
 
 export const getCart = async (): Promise<Cart> => {
-  const res = await axios.get(`${API_URL}cart`, {
-    headers: getAuthHeaders(),
-    withCredentials: true,
-  });
-  return res.data.data || res.data;
+  const res = await apiClient.get('cart');
+  return res.data || res;
 };
 
 export const addToCart = async (productId: string, quantity: number = 1): Promise<Cart> => {
-  const res = await axios.post(
-    `${API_URL}cart/add`,
-    { productId, quantity },
-    {
-      headers: getAuthHeaders(),
-      withCredentials: true,
-    }
-  );
-  return res.data.data || res.data;
+  const res = await apiClient.post('cart/add', { productId, quantity });
+  return res.data || res;
 };
 
 export const updateCartItem = async (productId: string, quantity: number): Promise<Cart> => {
-  const res = await axios.put(
-    `${API_URL}cart/update`,
-    { productId, quantity },
-    {
-      headers: getAuthHeaders(),
-      withCredentials: true,
-    }
-  );
-  return res.data.data || res.data;
+  const res = await apiClient.put('cart/update', { productId, quantity });
+  return res.data || res;
 };
 
 export const removeFromCart = async (productId: string): Promise<Cart> => {
-  const res = await axios.delete(`${API_URL}cart/remove/${productId}`, {
-    headers: getAuthHeaders(),
-    withCredentials: true,
-  });
-  return res.data.data || res.data;
+  const res = await apiClient.delete(`cart/remove/${productId}`);
+  return res.data || res;
 };
 
 export const clearCart = async (): Promise<void> => {
-  await axios.delete(`${API_URL}cart/clear`, {
-    headers: getAuthHeaders(),
-    withCredentials: true,
-  });
+  await apiClient.delete('cart/clear');
 };
 

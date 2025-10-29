@@ -1,12 +1,4 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-
-// Headers không cần Authorization vì backend sẽ đọc từ httpOnly cookie
-const getAuthHeaders = () => {
-  return {};
-};
+import apiClient from '../apiClient';
 
 export interface OrderItem {
   productId: string;
@@ -29,45 +21,25 @@ export interface Order {
 }
 
 export const createOrder = async (): Promise<Order> => {
-  const res = await axios.post(
-    `${API_URL}orders`,
-    {},
-    {
-      headers: getAuthHeaders(),
-      withCredentials: true,
-    }
-  );
-  return res.data.data || res.data;
+  const res = await apiClient.post('orders', {});
+  return res.data || res;
 };
 
 export const getOrderHistory = async (): Promise<Order[]> => {
-  const res = await axios.get(`${API_URL}orders`, {
-    headers: getAuthHeaders(),
-    withCredentials: true,
-  });
-  return res.data.data || res.data;
+  const res = await apiClient.get('orders');
+  return res.data || res;
 };
 
 export const getOrderById = async (orderId: string): Promise<Order> => {
-  const res = await axios.get(`${API_URL}orders/${orderId}`, {
-    headers: getAuthHeaders(),
-    withCredentials: true,
-  });
-  return res.data.data || res.data;
+  const res = await apiClient.get(`orders/${orderId}`);
+  return res.data || res;
 };
 
 export const updatePaymentStatus = async (
   orderId: string,
   paymentMethod: string = 'card'
 ): Promise<Order> => {
-  const res = await axios.post(
-    `${API_URL}orders/${orderId}/payment`,
-    { paymentMethod },
-    {
-      headers: getAuthHeaders(),
-      withCredentials: true,
-    }
-  );
-  return res.data.data || res.data;
+  const res = await apiClient.post(`orders/${orderId}/payment`, { paymentMethod });
+  return res.data || res;
 };
 
