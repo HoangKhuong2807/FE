@@ -30,7 +30,7 @@ export interface Order {
 
 export const createOrder = async (): Promise<Order> => {
   const res = await axios.post(
-    `${API_URL}/orders`,
+    `${API_URL}orders`,
     {},
     {
       headers: getAuthHeaders(),
@@ -41,7 +41,7 @@ export const createOrder = async (): Promise<Order> => {
 };
 
 export const getOrderHistory = async (): Promise<Order[]> => {
-  const res = await axios.get(`${API_URL}/orders`, {
+  const res = await axios.get(`${API_URL}orders`, {
     headers: getAuthHeaders(),
     withCredentials: true,
   });
@@ -49,7 +49,7 @@ export const getOrderHistory = async (): Promise<Order[]> => {
 };
 
 export const getOrderById = async (orderId: string): Promise<Order> => {
-  const res = await axios.get(`${API_URL}/orders/${orderId}`, {
+  const res = await axios.get(`${API_URL}orders/${orderId}`, {
     headers: getAuthHeaders(),
     withCredentials: true,
   });
@@ -61,7 +61,7 @@ export const updatePaymentStatus = async (
   paymentMethod: string = 'card'
 ): Promise<Order> => {
   const res = await axios.post(
-    `${API_URL}/orders/${orderId}/payment`,
+    `${API_URL}orders/${orderId}/payment`,
     { paymentMethod },
     {
       headers: getAuthHeaders(),

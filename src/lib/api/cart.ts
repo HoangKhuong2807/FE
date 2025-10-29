@@ -27,7 +27,7 @@ export interface Cart {
 }
 
 export const getCart = async (): Promise<Cart> => {
-  const res = await axios.get(`${API_URL}/cart`, {
+  const res = await axios.get(`${API_URL}cart`, {
     headers: getAuthHeaders(),
     withCredentials: true,
   });
